@@ -1,20 +1,63 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
+import StartGame from './src/screens/StartGame';
+import { COLORS } from './src/theme/colors';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useState } from 'react';
+import Game from './src/screens/Game';
+import GameOver from './src/screens/GameOver';
 
 export default function App() {
+
+  const [number, setNumber] = useState(null);
+  const [gameOver, setGameOver] = useState(false);
+
+  const handlePickNumber = (num) => {
+    setNumber(num);
+  }
+
+  const handleRightGuess = () => {
+    console.log('Game Over!');
+    setGameOver(true);
+  }
+
+  const handleGameRestart = () => {
+    setGameOver(false);
+    setNumber(null);
+  }
+
+  let screen = <StartGame onPickNumber={handlePickNumber} />
+
+  if(number) {
+    screen = <Game onRestartGame={handleGameRestart} onRightGuess={handleRightGuess}/>;
+  }
+
+  if (gameOver) {
+    screen = <GameOver onRestartGame={handleGameRestart}/>
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <LinearGradient colors={[COLORS.background300, '#ffffff']} style={styles.flexFull}>
+      <ImageBackground 
+        source={require('./src/assets/bigeyes_cat.jpg')}
+        resizeMode="cover"
+        style={styles.flexFull}
+        imageStyle={styles.imgBackground}>
+        <SafeAreaView style={styles.flexFull}>
+          {screen}
+        </SafeAreaView>
+
+      </ImageBackground>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  flexFull: {
+    flex:1,
   },
+  imgBackground: {
+    opacity: .7,
+  }
 });
+
