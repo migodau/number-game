@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StyleSheet, View, Text, Alert } from 'react-native'
 import DirectionButtons from '../components/game/DirectionButtons';
 import NumberGuess from '../components/game/NumberGuess';
@@ -13,30 +13,30 @@ const generateRandomBetween = (min, max) => {
     return rndNum;
 }
 
+const resetBondaries = () => {
+  min = 0;
+  max = 100;
+}
+
 let min = 0;
 let max = 100;
+
 const initialGuess = generateRandomBetween(min,max);
 
 export default Game = ({ onRestartGame, onRightGuess }) => {
   const [guess, setGuess] = useState(initialGuess);
-
-  const resetBondary = (wrongDirection) => {
-    if (wrongDirection === 'lower') {
-      max = 100;
-      return;
-    }
-    min = 0;
-  }
+  useEffect(() => {
+    resetBondaries();
+  }, []);
 
   const guessAgain = (direction) => { // tip = 'lower' | 'higher'
-    console.log({min, max, guess});
     if (
       (direction === 'higher' && guess + 1 === max) ||
       (direction === 'lower' && guess - 1 === min)) {
       Alert.alert(
         "Something is wrong...", 
         "That is not possible. Make sure you provide true directions.",
-        [{ text: "Sorry!", style: 'cancel', onPress: resetBondary.bind(this, direction)}]
+        [{ text: "Sorry!", style: 'cancel', onPress: resetBondaries}]
       )
       return;
     }
