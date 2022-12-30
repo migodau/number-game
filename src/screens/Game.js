@@ -23,19 +23,29 @@ let max = 100;
 
 const initialGuess = generateRandomBetween(min,max);
 
-export default Game = ({ onRestartGame, onRightGuess }) => {
+export default Game = ({ choosenNumber, onRestartGame, onRightGuess }) => {
   const [guess, setGuess] = useState(initialGuess);
+  
   useEffect(() => {
     resetBondaries();
   }, []);
 
+  useEffect(() => {
+    if (guess !== choosenNumber) {
+      return;
+    }
+
+    setTimeout(onRightGuess, 1000);
+
+  }, [guess])
+
   const guessAgain = (direction) => { // tip = 'lower' | 'higher'
     if (
-      (direction === 'higher' && guess + 1 === max) ||
-      (direction === 'lower' && guess - 1 === min)) {
+      (direction === 'higher' && choosenNumber < guess ) ||
+      (direction === 'lower' && choosenNumber > guess)) {
       Alert.alert(
-        "Something is wrong...", 
-        "That is not possible. Make sure you provide true directions.",
+        "Something is not right...", 
+        "Hey! You should not lie! 😠",
         [{ text: "Sorry!", style: 'cancel', onPress: resetBondaries}]
       )
       return;
@@ -55,7 +65,6 @@ export default Game = ({ onRestartGame, onRightGuess }) => {
       <NumberGuess>{guess}</NumberGuess>
       <Subtitle>Higher or Lower?</Subtitle>
       <DirectionButtons onPress={guessAgain}/>
-      <Button type="success" onPress={onRightGuess}>You got it! That's right!</Button>
       <View>
         <Text>LOG ROUNDS</Text>
       </View>
