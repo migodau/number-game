@@ -3,9 +3,10 @@ import Button from '../components/ui/Button'
 import Title from '../components/ui/Title'
 import { COLORS } from '../theme/colors'
 
-export default GameOver = ({ guessedNumber, onRestartGame }) => {
+export default GameOver = ({ guessedNumber, rounds, onRestartGame }) => {
   return (
     <View style={styles.container}>
+      
       
       <View style={styles.gameOverContainer}>
         <View style={styles.imageContainer}>
@@ -15,8 +16,13 @@ export default GameOver = ({ guessedNumber, onRestartGame }) => {
         </View>
         <View style={styles.textContainer}>
           <Title>✨ Yay!! ✨</Title>
-          <Text>The number is {guessedNumber}!!</Text>
-          <Text>Thank you for playing!</Text>
+          <Text style={styles.summaryText}>
+            The number is <Text style={styles.highlight}>{guessedNumber}</Text>!!
+          </Text>
+          <Text style={styles.summaryText}>
+            The cat needed <Text style={styles.highlight}>{rounds}</Text> rounds to guess your number
+          </Text>
+          <Text style={styles.thankyouText}>Thank you for playing!</Text>
         </View>
         <View style={styles.buttonWrapper}>
           <Button type="primary" onPress={onRestartGame}>Play again</Button>
@@ -37,19 +43,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageWrapper: {
-    width: 150,
-    height: 150,
+    width: 160,
+    height: 160,
     overflow: 'hidden',
-    borderRadius: 20,
+    borderRadius: 80,
+    padding: 8,
+    backgroundColor: '#fff' 
   },
   image: {
     width: '100%',
     height: '100%',
   },
   gameOverContainer: {
-    backgroundColor: '#fff',
-    borderColor: COLORS.background500,
-    borderWidth: 10,
+    backgroundColor: COLORS.background300,
+    // borderColor: COLORS.background500,
+    // borderWidth: 10,
     paddingVertical: 24,
     marginHorizontal: 24,
     borderRadius: 12,
@@ -58,6 +66,19 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: 'center'
+  },
+  summaryText: {
+    fontFamily: 'open-sans',
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  thankyouText: {
+    fontFamily: 'open-sans-bold',
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  highlight: {
+    fontFamily: 'open-sans-bold',
   },
   buttonWrapper: {
     alignItems: 'stretch',

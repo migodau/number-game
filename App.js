@@ -12,6 +12,7 @@ import AppLoading from 'expo-app-loading';
 export default function App() {
 
   const [number, setNumber] = useState(null);
+  const [rounds, setRounds] = useState(null);
   const [gameOver, setGameOver] = useState(false);
 
   const [fontLoaded] = useFonts({
@@ -27,24 +28,26 @@ export default function App() {
     setNumber(num);
   }
 
-  const handleRightGuess = () => {
+  const handleGameOver = (rounds) => {
     console.log('Game Over!');
     setGameOver(true);
+    setRounds(rounds);
   }
 
   const handleGameRestart = () => {
     setGameOver(false);
     setNumber(null);
+    setRounds(0);
   }
 
   let screen = <StartGame onPickNumber={handlePickNumber} />
 
   if(number) {
-    screen = <Game choosenNumber={number} onRestartGame={handleGameRestart} onRightGuess={handleRightGuess}/>;
+    screen = <Game choosenNumber={number} onRestartGame={handleGameRestart} onGameOver={handleGameOver}/>;
   }
 
   if (gameOver) {
-    screen = <GameOver guessedNumber={number} onRestartGame={handleGameRestart}/>
+    screen = <GameOver guessedNumber={number} rounds={rounds} onRestartGame={handleGameRestart}/>
   }
 
   return (

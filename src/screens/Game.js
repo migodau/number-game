@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Alert } from 'react-native'
+import { StyleSheet, View, Text, Alert, FlatList } from 'react-native'
 import DirectionButtons from '../components/game/DirectionButtons';
+import GuessLogItem from '../components/game/GuessLogItem';
 import NumberGuess from '../components/game/NumberGuess';
 import Button from '../components/ui/Button';
 import Subtitle from '../components/ui/Subtitle';
@@ -23,11 +24,13 @@ let max = 100;
 
 const initialGuess = generateRandomBetween(min,max);
 
-export default Game = ({ choosenNumber, onRestartGame, onRightGuess }) => {
+export default Game = ({ choosenNumber, onRestartGame, onGameOver }) => {
   const [guess, setGuess] = useState(initialGuess);
+  const [guessRounds, setGuessRounds ] = useState([initialGuess]);
   
   useEffect(() => {
     resetBondaries();
+
   }, []);
 
   useEffect(() => {
@@ -35,7 +38,7 @@ export default Game = ({ choosenNumber, onRestartGame, onRightGuess }) => {
       return;
     }
 
-    setTimeout(onRightGuess, 1000);
+    setTimeout(onGameOver.bind(this, guessRounds.length), 500);
 
   }, [guess])
 
@@ -46,17 +49,18 @@ export default Game = ({ choosenNumber, onRestartGame, onRightGuess }) => {
       Alert.alert(
         "Something is not right...", 
         "Hey! You should not lie! 😠",
-        [{ text: "Sorry!", style: 'cancel', onPress: resetBondaries}]
+        [{ text: "Sorry!", style: 'cancel'}]
       )
       return;
     }
     if (direction === 'lower') {
       max = guess;
-      setGuess(current => generateRandomBetween(min, current));
-      return;
+    } else {
+      min = guess;
     }
-    min = guess;
-    setGuess(current => generateRandomBetween(current, max));
+    const newGuess = generateRandomBetween(min, max);
+    setGuess(newGuess);
+    setGuessRounds(current => [ ...current, newGuess ]);
   }
 
   return (
@@ -65,8 +69,14 @@ export default Game = ({ choosenNumber, onRestartGame, onRightGuess }) => {
       <NumberGuess>{guess}</NumberGuess>
       <Subtitle>Higher or Lower?</Subtitle>
       <DirectionButtons onPress={guessAgain}/>
-      <View>
-        <Text>LOG ROUNDS</Text>
+
+      <View style={styles.rounds}>
+        <Subtitle>Guess Round Logs</Subtitle>
+        <FlatList 
+          data={guessRounds} 
+          renderItem={({ item, index }) => <GuessLogItem value={item} round={index + 1} />}
+          keyExtractor={(_, index) => index}
+        />
       </View>
       <Button type="danger" onPress={onRestartGame}>Restart</Button>
     
@@ -79,5 +89,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     marginTop: 70,
+  },
+  rounds: {
+    marginVertical: 16,
+    flex: 1,
   },
 })
