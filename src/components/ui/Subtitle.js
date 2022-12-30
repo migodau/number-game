@@ -9,9 +9,9 @@ export default Subtitle = ({children }) => {
 
 const styles = StyleSheet.create({
   subtitle: {
+    fontFamily: 'open-sans-bold',
     fontSize: 22,
     color: COLORS.text700,
-    fontWeight: 'bold',
     paddingBottom: 8,
     paddingTop: 16,
   },

@@ -9,9 +9,9 @@ export default Title = ({children }) => {
 
 const styles = StyleSheet.create({
   title: {
+    fontFamily: 'open-sans-bold',
     fontSize: 28,
     color: COLORS.text700,
-    fontWeight: 'bold',
     paddingVertical: 8,
   },
   // level1: {

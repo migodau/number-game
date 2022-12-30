@@ -6,11 +6,22 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 import Game from './src/screens/Game';
 import GameOver from './src/screens/GameOver';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 
 export default function App() {
 
   const [number, setNumber] = useState(null);
   const [gameOver, setGameOver] = useState(false);
+
+  const [fontLoaded] = useFonts({
+    'open-sans': require('./src/assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./src/assets/fonts/OpenSans-Bold.ttf'),
+  });
+
+  if (!fontLoaded) {
+    return <AppLoading/>
+  }
 
   const handlePickNumber = (num) => {
     setNumber(num);
@@ -29,17 +40,17 @@ export default function App() {
   let screen = <StartGame onPickNumber={handlePickNumber} />
 
   if(number) {
-    screen = <Game onRestartGame={handleGameRestart} onRightGuess={handleRightGuess}/>;
+    screen = <Game choosenNumber={number} onRestartGame={handleGameRestart} onRightGuess={handleRightGuess}/>;
   }
 
   if (gameOver) {
-    screen = <GameOver onRestartGame={handleGameRestart}/>
+    screen = <GameOver guessedNumber={number} onRestartGame={handleGameRestart}/>
   }
 
   return (
     <LinearGradient colors={[COLORS.background300, '#ffffff']} style={styles.flexFull}>
       <ImageBackground 
-        source={require('./src/assets/bigeyes_cat.jpg')}
+        source={require('./src/assets/images/bigeyes_cat.jpg')}
         resizeMode="cover"
         style={styles.flexFull}
         imageStyle={styles.imgBackground}>
