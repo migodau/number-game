@@ -1,4 +1,4 @@
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, Dimensions } from 'react-native';
 import { COLORS } from '../../theme/colors';
 
 export default Subtitle = ({children }) => {
@@ -7,10 +7,13 @@ export default Subtitle = ({children }) => {
   );
 }
 
+
+const deviceWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
   subtitle: {
     fontFamily: 'open-sans-bold',
-    fontSize: 22,
+    fontSize: deviceWidth > 380 ? 22 : 20,
     color: COLORS.text700,
     paddingBottom: 8,
     paddingTop: 16,

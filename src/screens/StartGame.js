@@ -1,11 +1,15 @@
 import { useState } from 'react'
-import { Alert, StyleSheet, TextInput, View, Text } from 'react-native'
+import { Alert, StyleSheet, TextInput, View, Text, useWindowDimensions } from 'react-native'
 import Button from '../components/ui/Button'
 import Card from '../components/ui/Card'
 import Title from '../components/ui/Title'
 import { COLORS } from '../theme/colors'
 
 export default StartGame = ({ onPickNumber }) => {
+
+  // to respond to rotation dinamically
+  const { width, height } = useWindowDimensions();
+  const marginTop = height < 400 ? 40 : 100;
 
   const [number, setNumber] = useState('');
 
@@ -28,7 +32,7 @@ export default StartGame = ({ onPickNumber }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { marginTop }]}>
       <Title>Let's play!</Title>
       <Card>
         <Text>Choose a number</Text>
@@ -54,7 +58,7 @@ export default StartGame = ({ onPickNumber }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
+    // marginTop: 100,
     alignItems: 'center',
   },
   textInput: {

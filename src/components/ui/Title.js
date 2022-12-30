@@ -1,4 +1,4 @@
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, Dimensions } from 'react-native';
 import { COLORS } from '../../theme/colors';
 
 export default Title = ({children }) => {
@@ -7,10 +7,12 @@ export default Title = ({children }) => {
   );
 }
 
+const deviceWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
   title: {
     fontFamily: 'open-sans-bold',
-    fontSize: 28,
+    fontSize: deviceWidth > 380 ? 28 : 24,
     color: COLORS.text700,
     paddingVertical: 8,
   },
